@@ -1,0 +1,81 @@
+---------------------------------------------------------------------
+But d'une expression régulière
+---------------------------------------------------------------------
+=> Filtrage de donnée.
+---------------------------------------------------------------------
+EXEMPLE : grep = filtrage par motif dnas un fichier, ligne par ligne. 
+grep option 'modif' fichier
+
+-E extension de l'expression régulière basique : utilise le modif donnée en argument
+-P considère l'expression comme un perl
+-l retourne les fichier avec la correpondance
+-L idem mais sans coresspondance
+-v retourne les lignes qui ne correspondent pas
+-c affiche le nombre de lignes
+-n affich ele numéro de la lgne avec la correspondance
+
+Grep : faire un & : 
+Il faut ajouter un second grep à notre expression : 
+
+echo "wes,hlesjeunes" | grep '[[:punct:]]' | grep '[[:space:]]'
+
+Grep : faire un OR : 
+Il faut créer un ensemble à l'aide du metacaractère [...]
+	
+echo "wesh les  jeunes" | grep '[[:punct:][:space:]]'
+
+Grep : filter des numéros de tel : 10 chiffres, commencent par 06, que des chiffres =>
+
+grep -E '^06[[:digit:]]{8}' tel.txt
+-E pour accepter l'extension, ^06 pour que la ligne commence par 06, digit pour les chiffres et {8} car a part le 06, il faut 10 chiffres !
+
+Pour donner ceux qui neux xorrepsondent pas, on utilise -v
+Pour ajouter les 07, on utilise : grep -E  '^06[[:digit:]]{8}|^07[[:digit:]]{8}' tel.txt avec | étant le OR
+
+Pour ajouter la ponctuation : 
+
+grep -E '^0(6|7)[[:punct:]]?([[:punct:]]?[[:digit:]]){8}' tel.txt
+
+^0(6|7) est meilleur pour soit 06 soit 07 au début;
+On regarde ensuite s'il y a une ponctuation (? important: 0 ou 1 ponctuation)
+Puis on regarde s'il y a une chiffre et peut etre une ponctuation : on compte la parenthèse 8 fois pour obtenir 10 chiffres.
+
+
+
+
+
+
+---------------------------------------------------------------------
+exemples de meta caractères : 
+. -> n'importe quel caractère
+[a-c] -> tout caractère qui appartient à l'ensemble
+[^a-c] -> tous sauf ceux de l'ensemble
+^. -> début de la ligne
+$. -> fin de la ligne
+.|. -> l'un ou l'autre
+?. -> 0 ou 1 nb d'occurences
+*. -> 0 ou n //
++ -> 1 ou n 
+
+Pour enlever le metacaractère : \
+
+----------------------------------------------------------------------
+URL : 
+
+Regexp : echo "http://www.utc.fr" | grep -E '^(http|https)://([[:alnum:]]|\.)*$'
+On utilise des ou pour tout tester.
+
+Pour filtrer les points : 
+ echo "http://www.utc...fr" | grep -E '^(http|https)://[^\.]([[:alnum:]]|\.)*[^\.]$' | grep -Ev '\.\.'
+
+On ajoute des filtres au début et a la fin pour les point, et on ajoute un condition qui renvoie toutes les chaines qui n'ont pas deux points. 
+
+
+
+
+
+
+
+
+ 
+
